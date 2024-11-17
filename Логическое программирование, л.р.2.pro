@@ -1,5 +1,5 @@
 domains
-	name = symbol	
+	name = symbol 
 database
 	nondeterm human(name, name)
 	nondeterm parent(name, name)
@@ -34,9 +34,9 @@ predicates
 	nondeterm input(integer)
 	nondeterm inputH(name)
 	nondeterm process(integer)
-	
+ 
 	nondeterm addHuman(name, name)
-	nondeterm addRelat(name, name)	
+	nondeterm addRelat(name, name) 
 	nondeterm changeHuman(name, name)
 	nondeterm changeRelat(name, name)
 	nondeterm deleteHuman(name)
@@ -44,173 +44,177 @@ predicates
 clauses
 	male(Y) :- human(Y,m).
 	female(X) :- human(X,f).
-	
+ 
 	father(X,Y) :- parent(X,Y), male(X).
 	mother(X,Y) :- parent(X,Y), female(X).
-	
+ 
 	son(X,Y) :- parent(Y,X), male(X).
 	daughter(X,Y) :- parent(Y,X), female(X).
-	
+ 
 	brother(X,Y) :- parent(Z,X), parent(Z,Y), male(X), X <> Y. 
 	sister(X,Y) :- parent(Z,X), parent(Z,Y), female(X), X <> Y. 
-	
+ 
 	brothers(X,Y) :- brother(X,Y), male(Y).
 	sisters(X,Y) :- sister(X,Y), female(Y).
-	
+ 
 	grandfather(X,Y) :- father(X,Z), parent(Z,Y).
 	grandmother(X,Y) :- mother(X,Z), parent(Z,Y).
-	
+ 
 	uncle(X,Y) :- brother(X,Z), parent(Z,Y).
 	aunt(X,Y) :- sister (X,Z), parent(Z,Y).
-	
+ 
 	nephew(X,Y) :- son(X,Z), brother(Y,Z); son(X,Z), sister(Y,Z).
 	niece(X,Y) :- daughter(X,Z), brother(Y,Z); daughter(X,Z), sister(Y,Z).
-	
+ 
 	ancestor(X,Y) :- parent(X,Y).
 	ancestor(X,Y) :- parent(X,Z), ancestor(Z,Y).
-	
+ 
 	offspring(X,Y) :- ancestor(Y,X).
-	
+ 
 	sibling(X,Y) :-  brother(X,Y), X <> Y; sister(X,Y), X <> Y.
-	
+ 
 	odnogodokS(X,Y) :- sibling(X,Y).
-  	odnogodokS(X,Y) :- sibling(Z,T), parent(Z,X), parent(T,Y), X <> Y.
-  	odnogodokS(X,Y) :- parent(X,Z), parent(T,Z), sibling(T,Y), X <> Y.
-  	odnogodokS(X,Y) :- parent(T,Z), parent(Y,Z), sibling(T,X), X <> Y.
-  	odnogodokS(X,Y) :- parent(W,Z), parent(T,Z), sibling(W,X), sibling(T,Y), X <> Y.
-  	odnogodokC(X,Y) :- parent(Z,X), parent(T,Y), odnogodokS(Z,T), X <> Y.
-  	odnogodokP(X,Y) :- parent(X,Z), parent(Y,T), odnogodokS(Z,T), X <> Y.
-  	odnogodok(X,Y) :- odnogodokS(X,Y); odnogodokC(X,Y); odnogodokP(X,Y).
-  	
-  	adult(X) :- parent(X,_); odnogodok(X,Y), parent(Y,_).
-  	
-  	child(X) :- not (adult(X)).
+	odnogodokS(X,Y) :- sibling(Z,T), parent(Z,X), parent(T,Y), X <> Y.
+	odnogodokS(X,Y) :- parent(X,Z), parent(T,Z), sibling(T,Y), X <> Y.
+	odnogodokS(X,Y) :- parent(T,Z), parent(Y,Z), sibling(T,X), X <> Y.
+	odnogodokS(X,Y) :- parent(W,Z), parent(T,Z), sibling(W,X), sibling(T,Y), X <> Y.
+	odnogodokC(X,Y) :- parent(Z,X), parent(T,Y), odnogodokS(Z,T), X <> Y.
+	odnogodokP(X,Y) :- parent(X,Z), parent(Y,T), odnogodokS(Z,T), X <> Y.
+	odnogodok(X,Y) :- odnogodokS(X,Y); odnogodokC(X,Y); odnogodokP(X,Y).
+   
+	adult(X) :- parent(X,_); odnogodok(X,Y), parent(Y,_).
+   
+	child(X) :- not (adult(X)).
 
 
 
 	input(X) :- readint(X).
-	
+ 
 	inputH(X) :- readln(X).
-	
-	
-		
+ 
+ 
+  
 	addHuman(Name, Gender) :- human(Name, Gender). 
 	addHuman(Name, Gender) :- assertz(human(Name, Gender)).
-	
+ 
 	addRelat(Parent, Child) :- parent(Parent, Child).
 	addRelat(Parent, Child) :- assertz(parent(Parent, Child)). 
-	
-	
-	
-	changeHuman(Name1, Name2) :- retract(human(Name1, Gender)), assertz(human(Name2, Gender)).
-	
-	changeRelat(Name1, Name2) :- retract(parent(Name1, Child)), assertz(parent(Name2, Child)), fail.
-	changeRelat(Name1, Name2) :- retract(parent(Parent, Name1)), assertz(parent(Parent, Name2)), fail.
- 	
-	
-	
+ 
+ 
+ 
+    changeHuman(Name1, Name2) :- retract(human(Name1, Gender)), assertz(human(Name2, Gender)).
+ 
+ 	changeRelat(Name1, Name2) :- retract(parent(Name1, Child)), assertz(parent(Name2, Child)), fail.
+  	changeRelat(Name1, Name2) :- retract(parent(Parent, Name1)), assertz(parent(Parent, Name2)), fail.
+  
+ 
+ 
 	deleteHuman(Name) :- retract(human(Name,_)).
-	
+ 
 	deleteRelat(Parent) :- retract(parent(Parent, _)), fail.
 	deleteRelat(Child) :- retract(parent(_, Child)), fail.
-	
-	menu :- write("--> Õ‡ÊÏËÚÂ 1   -  —Óı‡ÌËÚ¸ ¡ƒ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 2   -  ƒÓ·‡‚ËÚ¸ ‰‡ÌÌ˚Â ‚ ¡ƒ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 3   -  »ÁÏÂÌËÚ¸ ‰‡ÌÌ˚Â ‚ ¡ƒ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 4   -  ”‰‡ÎËÚ¸ ‰‡ÌÌ˚Â ËÁ ¡ƒ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 5   -  ÃÛÊÒÍÓÈ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 6   -  ∆ÂÌÒÍËÈ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 7   -  ŒÚÂˆ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 8   -  Ã‡Ú¸"), nl,
-		write("--> Õ‡ÊÏËÚÂ 9   -  —˚Ì"), nl,
-		write("--> Õ‡ÊÏËÚÂ 10 -  ƒÓ˜¸"), nl,
-		write("--> Õ‡ÊÏËÚÂ 11 -  ¡‡Ú"), nl,
-		write("--> Õ‡ÊÏËÚÂ 12 -  —ÂÒÚ‡"), nl,
-		write("--> Õ‡ÊÏËÚÂ 13 -  ¡‡Ú¸ˇ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 14 -  —ÂÒÚ˚"), nl,
-		write("--> Õ‡ÊÏËÚÂ 15 -  ƒÂ‰Û¯Í‡"), nl,
-		write("--> Õ‡ÊÏËÚÂ 16 -  ¡‡·Û¯Í‡"), nl,
-		write("--> Õ‡ÊÏËÚÂ 17 -  ƒˇ‰ˇ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 18 -  “ÂÚˇ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 19 -  œÎÂÏˇÌÌËÍ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 20 -  œÎÂÏˇÌÌËˆ‡"), nl,
-		write("--> Õ‡ÊÏËÚÂ 21 -  œÂ‰ÓÍ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 22 -  œÓÚÓÏÓÍ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 23 -  À˛‰Ë Ó‰ÌÓ„Ó ÔÓÍÓÎÂÌËˇ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 24 -  ¬ÁÓÒÎ˚È"), nl,
-		write("--> Õ‡ÊÏËÚÂ 25 -  –Â·ÂÌÓÍ"), nl,
-		write("--> Õ‡ÊÏËÚÂ 26 -  ¬˚ıÓ‰"), nl, nl,
-		
-		input(X), nl, process(X).
-	
-	process(1) :- save("C:\\VIP52\\BIN\\WIN\\32\\relatives1.dba"), menu.
-	
-	process(2) :- write("¬‚Â‰ËÚÂ ËÏˇ Ó‰ËÚÂÎˇ: "), inputH(X1), write("¬‚Â‰ËÚÂ ÔÓÎ Ó‰ËÚÂÎˇ: "), inputH(Y1), addHuman(X1, Y1), 
-		      write("¬‚Â‰ËÚÂ ËÏˇ Â·ÂÌÍ‡: "), inputH(X2), write("¬‚Â‰ËÚÂ ÔÓÎ Â·ÂÌÍ‡: "), inputH(Y2), nl, addHuman(X2, Y2), addRelat(X1, X2), menu.
-	
-	process(3) :- write("¬‚Â‰ËÚÂ ÒÚ‡ÓÂ ËÏˇ ˜ÂÎÓ‚ÂÍ‡: "), inputH(X), write("¬‚Â‰ËÚÂ ÌÓ‚ÓÂ ËÏˇ ˜ÂÎÓ‚ÂÍ‡: "), inputH(Y), nl, changeHuman(X,Y), changeRelat(X,Y), menu; menu.
-	
-	process(4) :- write("¬‚Â‰ËÚÂ ËÏˇ ˜ÂÎÓ‚ÂÍ‡: "), inputH(X), nl, deleteHuman(X), deleteRelat(X), menu; menu.
-	
-	process(5) :- write("¬‚Â‰ËÚÂ ËÏˇ: "), inputH(X), male(X), write("\nﬂ‚ÎˇÂÚÒˇ ÏÛÊÒÍËÏ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ÏÛÊÒÍËÏ\n\n"), menu.
 
-	process(6) :- write("¬‚Â‰ËÚÂ ËÏˇ: "), inputH(X), female(X), write("\nﬂ‚ÎˇÂÚÒˇ ÊÂÌÒÍËÏ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ÊÂÌÒÍËÏ\n\n"), menu.
-	
-	process(7) :- write("¬‚Â‰ËÚÂ ËÏˇ ÓÚˆ‡: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ Â·ÂÌÍ‡: "), inputH(Y), father(X,Y), 
-		      write("\nﬂ‚ÎˇÂÚÒˇ ÓÚˆÓÏ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ÓÚˆÓÏ\n\n"), menu.
-	
-	process(8) :- write("¬‚Â‰ËÚÂ ËÏˇ Ï‡ÚÂË: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ Â·ÂÌÍ‡: "), inputH(Y), mother(X,Y), 
-	              write("\nﬂ‚ÎˇÂÚÒˇ Ï‡ÚÂ¸˛\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ Ï‡ÚÂ¸˛\n\n"), menu.
-			
-	process(9) :- write("¬‚Â‰ËÚÂ ËÏˇ Ò˚Ì‡: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ Ó‰ËÚÂÎˇ: "), inputH(Y), son(X,Y), 
-	              write("\nﬂ‚ÎˇÂÚÒˇ Ò˚ÌÓÏ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ Ò˚ÌÓÏ\n\n"), menu.
-	
-	process(10) :- write("¬‚Â‰ËÚÂ ËÏˇ ‰Ó˜ÂË: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ Ó‰ËÚÂÎˇ: "), inputH(Y), daughter(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ‰Ó˜Â¸˛\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ‰Ó˜Â¸˛\n\n"), menu.
-	
-	process(11) :- write("¬‚Â‰ËÚÂ ËÏˇ ·‡Ú‡: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ·‡Ú‡ ËÎË ÒÂÒÚ˚: "), inputH(Y), brother(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ·‡ÚÓÏ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ·‡ÚÓÏ\n\n"), menu.
-	
-	process(12) :- write("¬‚Â‰ËÚÂ ËÏˇ ÒÂÒÚ˚: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ·‡Ú‡ ËÎË ÒÂÒÚ˚: "), inputH(Y), sister(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ÒÂÒÚÓÈ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ÒÂÒÚÓÈ\n\n"), menu.
-	
-	process(13) :- write("¬‚Â‰ËÚÂ ËÏˇ ·‡Ú‡: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ·‡Ú‡: "), inputH(Y), brothers(X,Y), 
-	               write("\nﬂ‚Îˇ˛ÚÒˇ ·‡Ú¸ˇÏË\n\n"), menu; write("\nÕÂ ˇ‚Îˇ˛ÚÒˇ ·‡Ú¸ˇÏË\n\n"), menu.
-	
-	process(14) :- write("¬‚Â‰ËÚÂ ËÏˇ ÒÂÒÚ˚: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ÒÂÒÚ˚: "), inputH(Y), sisters(X,Y), 
-	               write("\nﬂ‚Îˇ˛ÚÒˇ ÒÂÒÚ‡ÏË\n\n"), menu; write("\nÕÂ ˇ‚Îˇ˛ÚÒˇ ÒÂÒÚ‡ÏË\n\n"), menu.
-	
-	process(15) :- write("¬‚Â‰ËÚÂ ËÏˇ ‰Â‰Û¯ÍË: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ‚ÌÛÍ‡ ËÎË ‚ÌÛ˜ÍË: "), inputH(Y), grandfather(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ‰Â‰Û¯ÍÓÈ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ‰Â‰Û¯ÍÓÈ\n\n"), menu.
-	
-	process(16) :- write("¬‚Â‰ËÚÂ ËÏˇ ·‡·Û¯ÍË: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ‚ÌÛÍ‡ ËÎË ‚ÌÛ˜ÍË: "), inputH(Y), grandmother(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ·‡·Û¯ÍÓÈ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ·‡·Û¯ÍÓÈ\n\n"), menu.
-	
-	process(17) :- write("¬‚Â‰ËÚÂ ËÏˇ ‰ˇ‰Ë: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ÔÎÂÏˇÌÌËÍ‡ ËÎË ÔÎÂÏˇÌÌËˆ˚: "), inputH(Y), uncle(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ‰ˇ‰ÂÈ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ‰ˇ‰ÂÈ\n\n"), menu.
-	
-	process(18) :- write("¬‚Â‰ËÚÂ ËÏˇ ÚÂÚË: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ÔÎÂÏˇÌÌËÍ‡ ËÎË ÔÎÂÏˇÌÌËˆ˚: "), inputH(Y), aunt(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ÚÂÚÂÈ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ÚÂÚÂÈ\n\n"), menu.
-	
-	process(19) :- write("¬‚Â‰ËÚÂ ËÏˇ ÔÎÂÏˇÌÌËÍ‡: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ‰ˇ‰Ë ËÎË ÚÂÚË: "), inputH(Y), nephew(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ÔÎÂÏˇÌÌËÍÓÏ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ÔÎÂÏˇÌÌËÍÓÏ\n\n"), menu.
-	
-	process(20) :- write("¬‚Â‰ËÚÂ ËÏˇ ÔÎÂÏˇÌÌËˆ˚: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ‰ˇ‰Ë ËÎË ÚÂÚË: "), inputH(Y), niece(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ÔÎÂÏˇÌÌËˆÂÈ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ÔÎÂÏˇÌÌËˆÂÈ\n\n"), menu.
-	
-	process(21) :- write("¬‚Â‰ËÚÂ ËÏˇ ÔÂ‰Í‡: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ÔÓÚÓÏÍ‡: "), inputH(Y), ancestor(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ÔÂ‰ÍÓÏ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ÔÂ‰ÍÓÏ\n\n"), menu.
-	
-	process(22) :- write("¬‚Â‰ËÚÂ ËÏˇ ÔÓÚÓÏÍ‡: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ÔÂ‰Í‡: "), inputH(Y), offspring(X,Y), 
-	               write("\nﬂ‚ÎˇÂÚÒˇ ÔÓÚÓÏÍÓÏ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ÔÓÚÓÏÍÓÏ\n\n"), menu.
-	
-	process(23) :- write("¬‚Â‰ËÚÂ ËÏˇ ˜ÂÎÓ‚ÂÍ‡: "), inputH(X), write("¬‚Â‰ËÚÂ ËÏˇ ˜ÂÎÓ‚ÂÍ‡: "), inputH(Y), odnogodok(X,Y), 
-	               write("\nﬂ‚Îˇ˛ÚÒˇ Î˛‰¸ÏË Ó‰ÌÓ„Ó ÔÓÍÓÎÂÌËˇ\n\n"), menu; write("\nÕÂ ˇ‚Îˇ˛ÚÒˇ Î˛‰¸ÏË Ó‰ÌÓ„Ó ÔÓÍÓÎÂÌËˇ\n\n"), menu.
-		
-	process(24) :- write("¬‚Â‰ËÚÂ ËÏˇ ‚ÁÓÒÎÓ„Ó: "), inputH(X), adult(X), write("\nﬂ‚ÎˇÂÚÒˇ ‚ÁÓÒÎ˚Ï\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ ‚ÁÓÒÎ˚Ï\n\n"), menu.
 
-	process(25) :- write("¬‚Â‰ËÚÂ ËÏˇ Â·ÂÌÍ‡: "), inputH(X), child(X), write("\nﬂ‚ÎˇÂÚÒˇ Â·ÂÌÍÓÏ\n\n"), menu; write("\nÕÂ ˇ‚ÎˇÂÚÒˇ Â·ÓÌÍÓÏ\n\n"), menu.
-	
-	process(26):-nl,nl, write(" ÓÌÂˆ!"), exit.
+ 
+	menu :- write("--> –ù–∞–∂–º–∏—Ç–µ 1  - –°–æ—Ö—Ä–∞–Ω–∏—Ç—å –ë–î"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 2  - –î–æ–±–∞–≤–∏—Ç—å –¥–∞–Ω–Ω—ã–µ –≤ –ë–î"), nl,
+    		write("--> –ù–∞–∂–º–∏—Ç–µ 3  - –ò–∑–º–µ–Ω–∏—Ç—å –¥–∞–Ω–Ω—ã–µ –≤ –ë–î"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 4  - –£–¥–∞–ª–∏—Ç—å –¥–∞–Ω–Ω—ã–µ –∏–∑ –ë–î"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 5  - –ú—É–∂—Å–∫–æ–π"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 6  - –ñ–µ–Ω—Å–∫–∏–π"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 7  - –û—Ç–µ—Ü"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 8  - –ú–∞—Ç—å"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 9  - –°—ã–Ω"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 10 - –î–æ—á—å"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 11 - –ë—Ä–∞—Ç"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 12 - –°–µ—Å—Ç—Ä–∞"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 13 - –ë—Ä–∞—Ç—å—è"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 14 - –°–µ—Å—Ç—Ä—ã"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 15 - –î–µ–¥—É—à–∫–∞"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 16 - –ë–∞–±—É—à–∫–∞"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 17 - –î—è–¥—è"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 18 - –¢–µ—Ç—è"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 19 - –ü–ª–µ–º—è–Ω–Ω–∏–∫"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 20 - –ü–ª–µ–º—è–Ω–Ω–∏—Ü–∞"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 21 - –ü—Ä–µ–¥–æ–∫"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 22 - –ü–æ—Ç–æ–º–æ–∫"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 23 - –õ—é–¥–∏ –æ–¥–Ω–æ–≥–æ –ø–æ–∫–æ–ª–µ–Ω–∏—è"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 24 - –í–∑—Ä–æ—Å–ª—ã–π"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 25 - –†–µ–±–µ–Ω–æ–∫"), nl,
+			write("--> –ù–∞–∂–º–∏—Ç–µ 26 - –í—ã—Ö–æ–¥"), nl, nl,
+
+
+  
+ 	input(X), nl, process(X).
+ 
+    process(1) :- save("C:\\VIP52\\BIN\\WIN\\32\\relatives1.dba"), menu.
+ 
+ 	process(2) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Ä–æ–¥–∏—Ç–µ–ª—è: "), inputH(X1), write("–í–≤–µ–¥–∏—Ç–µ –ø–æ–ª —Ä–æ–¥–∏—Ç–µ–ª—è: "), inputH(Y1), addHuman(X1, Y1), 
+        	      write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Ä–µ–±–µ–Ω–∫–∞: "), inputH(X2), write("–í–≤–µ–¥–∏—Ç–µ –ø–æ–ª —Ä–µ–±–µ–Ω–∫–∞: "), inputH(Y2), nl, addHuman(X2, Y2), addRelat(X1, X2), menu.
+ 
+ 	process(3) :- write("–í–≤–µ–¥–∏—Ç–µ —Å—Ç–∞—Ä–æ–µ –∏–º—è —á–µ–ª–æ–≤–µ–∫–∞: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –Ω–æ–≤–æ–µ –∏–º—è —á–µ–ª–æ–≤–µ–∫–∞: "), inputH(Y), nl, changeHuman(X,Y), changeRelat(X,Y), menu; menu.
+ 
+ 	process(4) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —á–µ–ª–æ–≤–µ–∫–∞: "), inputH(X), nl, deleteHuman(X), deleteRelat(X), menu; menu.
+ 
+ 	process(5) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è: "), inputH(X), male(X), write("\n–Ø–≤–ª—è–µ—Ç—Å—è –º—É–∂—Å–∫–∏–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –º—É–∂—Å–∫–∏–º\n\n"), menu.
+
+ 	process(6) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è: "), inputH(X), female(X), write("\n–Ø–≤–ª—è–µ—Ç—Å—è –∂–µ–Ω—Å–∫–∏–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –∂–µ–Ω—Å–∫–∏–º\n\n"), menu.
+ 
+ 	process(7) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –æ—Ç—Ü–∞: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Ä–µ–±–µ–Ω–∫–∞: "), inputH(Y), father(X,Y), 
+        		  write("\n–Ø–≤–ª—è–µ—Ç—Å—è –æ—Ç—Ü–æ–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –æ—Ç—Ü–æ–º\n\n"), menu.
+ 
+ 	process(8) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –º–∞—Ç–µ—Ä–∏: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Ä–µ–±–µ–Ω–∫–∞: "), inputH(Y), mother(X,Y), 
+                  write("\n–Ø–≤–ª—è–µ—Ç—Å—è –º–∞—Ç–µ—Ä—å—é\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –º–∞—Ç–µ—Ä—å—é\n\n"), menu.
+   
+ 	process(9) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Å—ã–Ω–∞: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Ä–æ–¥–∏—Ç–µ–ª—è: "), inputH(Y), son(X,Y), 
+                  write("\n–Ø–≤–ª—è–µ—Ç—Å—è —Å—ã–Ω–æ–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è —Å—ã–Ω–æ–º\n\n"), menu.
+ 
+ 	process(10) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –¥–æ—á–µ—Ä–∏: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Ä–æ–¥–∏—Ç–µ–ª—è: "), inputH(Y), daughter(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è –¥–æ—á–µ—Ä—å—é\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –¥–æ—á–µ—Ä—å—é\n\n"), menu.
+ 
+ 	process(11) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –±—Ä–∞—Ç–∞: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –±—Ä–∞—Ç–∞ –∏–ª–∏ —Å–µ—Å—Ç—Ä—ã: "), inputH(Y), brother(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è –±—Ä–∞—Ç–æ–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –±—Ä–∞—Ç–æ–º\n\n"), menu.
+ 
+ 	process(12) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Å–µ—Å—Ç—Ä—ã: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –±—Ä–∞—Ç–∞ –∏–ª–∏ —Å–µ—Å—Ç—Ä—ã: "), inputH(Y), sister(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è —Å–µ—Å—Ç—Ä–æ–π\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è —Å–µ—Å—Ç—Ä–æ–π\n\n"), menu.
+ 
+ 	process(13) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –±—Ä–∞—Ç–∞: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –±—Ä–∞—Ç–∞: "), inputH(Y), brothers(X,Y), 
+                   write("\n–Ø–≤–ª—è—é—Ç—Å—è –±—Ä–∞—Ç—å—è–º–∏\n\n"), menu; write("\n–ù–µ —è–≤–ª—è—é—Ç—Å—è –±—Ä–∞—Ç—å—è–º–∏\n\n"), menu.
+ 
+ 	process(14) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Å–µ—Å—Ç—Ä—ã: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Å–µ—Å—Ç—Ä—ã: "), inputH(Y), sisters(X,Y), 
+                   write("\n–Ø–≤–ª—è—é—Ç—Å—è —Å–µ—Å—Ç—Ä–∞–º–∏\n\n"), menu; write("\n–ù–µ —è–≤–ª—è—é—Ç—Å—è —Å–µ—Å—Ç—Ä–∞–º–∏\n\n"), menu.
+ 
+ 	process(15) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –¥–µ–¥—É—à–∫–∏: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –≤–Ω—É–∫–∞ –∏–ª–∏ –≤–Ω—É—á–∫–∏: "), inputH(Y), grandfather(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è –¥–µ–¥—É—à–∫–æ–π\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –¥–µ–¥—É—à–∫–æ–π\n\n"), menu.
+ 
+ 	process(16) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –±–∞–±—É—à–∫–∏: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –≤–Ω—É–∫–∞ –∏–ª–∏ –≤–Ω—É—á–∫–∏: "), inputH(Y), grandmother(X,Y),
+				   write("\n–Ø–≤–ª—è–µ—Ç—Å—è –±–∞–±—É—à–∫–æ–π\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –±–∞–±—É—à–∫–æ–π\n\n"), menu.
+ 
+ 	process(17) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –¥—è–¥–∏: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –ø–ª–µ–º—è–Ω–Ω–∏–∫–∞ –∏–ª–∏ –ø–ª–µ–º—è–Ω–Ω–∏—Ü—ã: "), inputH(Y), uncle(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è –¥—è–¥–µ–π\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –¥—è–¥–µ–π\n\n"), menu.
+ 
+ 	process(18) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Ç–µ—Ç–∏: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –ø–ª–µ–º—è–Ω–Ω–∏–∫–∞ –∏–ª–∏ –ø–ª–µ–º—è–Ω–Ω–∏—Ü—ã: "), inputH(Y), aunt(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è —Ç–µ—Ç–µ–π\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è —Ç–µ—Ç–µ–π\n\n"), menu.
+ 
+	process(19) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –ø–ª–µ–º—è–Ω–Ω–∏–∫–∞: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –¥—è–¥–∏ –∏–ª–∏ —Ç–µ—Ç–∏: "), inputH(Y), nephew(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è –ø–ª–µ–º—è–Ω–Ω–∏–∫–æ–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –ø–ª–µ–º—è–Ω–Ω–∏–∫–æ–º\n\n"), menu.
+ 
+	process(20) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –ø–ª–µ–º—è–Ω–Ω–∏—Ü—ã: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –¥—è–¥–∏ –∏–ª–∏ —Ç–µ—Ç–∏: "), inputH(Y), niece(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è –ø–ª–µ–º—è–Ω–Ω–∏—Ü–µ–π\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –ø–ª–µ–º—è–Ω–Ω–∏—Ü–µ–π\n\n"), menu.
+ 
+	process(21) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –ø—Ä–µ–¥–∫–∞: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –ø–æ—Ç–æ–º–∫–∞: "), inputH(Y), ancestor(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è –ø—Ä–µ–¥–∫–æ–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –ø—Ä–µ–¥–∫–æ–º\n\n"), menu.
+ 
+	process(22) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –ø–æ—Ç–æ–º–∫–∞: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –ø—Ä–µ–¥–∫–∞: "), inputH(Y), offspring(X,Y), 
+                   write("\n–Ø–≤–ª—è–µ—Ç—Å—è –ø–æ—Ç–æ–º–∫–æ–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –ø–æ—Ç–æ–º–∫–æ–º\n\n"), menu.
+ 
+	process(23) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —á–µ–ª–æ–≤–µ–∫–∞: "), inputH(X), write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —á–µ–ª–æ–≤–µ–∫–∞: "), inputH(Y), odnogodok(X,Y), 
+                   write("\n–Ø–≤–ª—è—é—Ç—Å—è –ª—é–¥—å–º–∏ –æ–¥–Ω–æ–≥–æ –ø–æ–∫–æ–ª–µ–Ω–∏—è\n\n"), menu; write("\n–ù–µ —è–≤–ª—è—é—Ç—Å—è –ª—é–¥—å–º–∏ –æ–¥–Ω–æ–≥–æ –ø–æ–∫–æ–ª–µ–Ω–∏—è\n\n"), menu.
+  
+	process(24) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è –≤–∑—Ä–æ—Å–ª–æ–≥–æ: "), inputH(X), adult(X), write("\n–Ø–≤–ª—è–µ—Ç—Å—è –≤–∑—Ä–æ—Å–ª—ã–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è –≤–∑—Ä–æ—Å–ª—ã–º\n\n"), menu.
+
+	process(25) :- write("–í–≤–µ–¥–∏—Ç–µ –∏–º—è —Ä–µ–±–µ–Ω–∫–∞: "), inputH(X), child(X), write("\n–Ø–≤–ª—è–µ—Ç—Å—è —Ä–µ–±–µ–Ω–∫–æ–º\n\n"), menu; write("\n–ù–µ —è–≤–ª—è–µ—Ç—Å—è —Ä–µ–±–æ–Ω–∫–æ–º\n\n"), menu.
+ 
+	process(26) :- nl,nl, write("–ö–æ–Ω–µ—Ü!"), exit.
 goal
 	consult("C:\\VIP52\\BIN\\WIN\\32\\relatives.dba"), menu.
