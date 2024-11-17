@@ -161,55 +161,55 @@ clauses
  	process(6) :- write("Введите имя: "), inputH(X), female(X), write("\nЯвляется женским\n\n"), menu; write("\nНе является женским\n\n"), menu.
  
  	process(7) :- write("Введите имя отца: "), inputH(X), write("Введите имя ребенка: "), inputH(Y), father(X,Y), 
-        		  write("\nЯвляется отцом\n\n"), menu; write("\nНе является отцом\n\n"), menu.
+        	      write("\nЯвляется отцом\n\n"), menu; write("\nНе является отцом\n\n"), menu.
  
  	process(8) :- write("Введите имя матери: "), inputH(X), write("Введите имя ребенка: "), inputH(Y), mother(X,Y), 
-                  write("\nЯвляется матерью\n\n"), menu; write("\nНе является матерью\n\n"), menu.
+                      write("\nЯвляется матерью\n\n"), menu; write("\nНе является матерью\n\n"), menu.
    
  	process(9) :- write("Введите имя сына: "), inputH(X), write("Введите имя родителя: "), inputH(Y), son(X,Y), 
-                  write("\nЯвляется сыном\n\n"), menu; write("\nНе является сыном\n\n"), menu.
+                      write("\nЯвляется сыном\n\n"), menu; write("\nНе является сыном\n\n"), menu.
  
  	process(10) :- write("Введите имя дочери: "), inputH(X), write("Введите имя родителя: "), inputH(Y), daughter(X,Y), 
-                   write("\nЯвляется дочерью\n\n"), menu; write("\nНе является дочерью\n\n"), menu.
+                       write("\nЯвляется дочерью\n\n"), menu; write("\nНе является дочерью\n\n"), menu.
  
  	process(11) :- write("Введите имя брата: "), inputH(X), write("Введите имя брата или сестры: "), inputH(Y), brother(X,Y), 
-                   write("\nЯвляется братом\n\n"), menu; write("\nНе является братом\n\n"), menu.
+                       write("\nЯвляется братом\n\n"), menu; write("\nНе является братом\n\n"), menu.
  
  	process(12) :- write("Введите имя сестры: "), inputH(X), write("Введите имя брата или сестры: "), inputH(Y), sister(X,Y), 
-                   write("\nЯвляется сестрой\n\n"), menu; write("\nНе является сестрой\n\n"), menu.
+                       write("\nЯвляется сестрой\n\n"), menu; write("\nНе является сестрой\n\n"), menu.
  
  	process(13) :- write("Введите имя брата: "), inputH(X), write("Введите имя брата: "), inputH(Y), brothers(X,Y), 
-                   write("\nЯвляются братьями\n\n"), menu; write("\nНе являются братьями\n\n"), menu.
+                       write("\nЯвляются братьями\n\n"), menu; write("\nНе являются братьями\n\n"), menu.
  
  	process(14) :- write("Введите имя сестры: "), inputH(X), write("Введите имя сестры: "), inputH(Y), sisters(X,Y), 
-                   write("\nЯвляются сестрами\n\n"), menu; write("\nНе являются сестрами\n\n"), menu.
+                       write("\nЯвляются сестрами\n\n"), menu; write("\nНе являются сестрами\n\n"), menu.
  
  	process(15) :- write("Введите имя дедушки: "), inputH(X), write("Введите имя внука или внучки: "), inputH(Y), grandfather(X,Y), 
-                   write("\nЯвляется дедушкой\n\n"), menu; write("\nНе является дедушкой\n\n"), menu.
+                       write("\nЯвляется дедушкой\n\n"), menu; write("\nНе является дедушкой\n\n"), menu.
  
  	process(16) :- write("Введите имя бабушки: "), inputH(X), write("Введите имя внука или внучки: "), inputH(Y), grandmother(X,Y),
-				   write("\nЯвляется бабушкой\n\n"), menu; write("\nНе является бабушкой\n\n"), menu.
+		       write("\nЯвляется бабушкой\n\n"), menu; write("\nНе является бабушкой\n\n"), menu.
  
  	process(17) :- write("Введите имя дяди: "), inputH(X), write("Введите имя племянника или племянницы: "), inputH(Y), uncle(X,Y), 
-                   write("\nЯвляется дядей\n\n"), menu; write("\nНе является дядей\n\n"), menu.
+                       write("\nЯвляется дядей\n\n"), menu; write("\nНе является дядей\n\n"), menu.
  
  	process(18) :- write("Введите имя тети: "), inputH(X), write("Введите имя племянника или племянницы: "), inputH(Y), aunt(X,Y), 
-                   write("\nЯвляется тетей\n\n"), menu; write("\nНе является тетей\n\n"), menu.
+                       write("\nЯвляется тетей\n\n"), menu; write("\nНе является тетей\n\n"), menu.
  
 	process(19) :- write("Введите имя племянника: "), inputH(X), write("Введите имя дяди или тети: "), inputH(Y), nephew(X,Y), 
-                   write("\nЯвляется племянником\n\n"), menu; write("\nНе является племянником\n\n"), menu.
+                       write("\nЯвляется племянником\n\n"), menu; write("\nНе является племянником\n\n"), menu.
  
 	process(20) :- write("Введите имя племянницы: "), inputH(X), write("Введите имя дяди или тети: "), inputH(Y), niece(X,Y), 
-                   write("\nЯвляется племянницей\n\n"), menu; write("\nНе является племянницей\n\n"), menu.
+                       write("\nЯвляется племянницей\n\n"), menu; write("\nНе является племянницей\n\n"), menu.
  
 	process(21) :- write("Введите имя предка: "), inputH(X), write("Введите имя потомка: "), inputH(Y), ancestor(X,Y), 
-                   write("\nЯвляется предком\n\n"), menu; write("\nНе является предком\n\n"), menu.
+                       write("\nЯвляется предком\n\n"), menu; write("\nНе является предком\n\n"), menu.
  
 	process(22) :- write("Введите имя потомка: "), inputH(X), write("Введите имя предка: "), inputH(Y), offspring(X,Y), 
-                   write("\nЯвляется потомком\n\n"), menu; write("\nНе является потомком\n\n"), menu.
+                       write("\nЯвляется потомком\n\n"), menu; write("\nНе является потомком\n\n"), menu.
  
 	process(23) :- write("Введите имя человека: "), inputH(X), write("Введите имя человека: "), inputH(Y), odnogodok(X,Y), 
-                   write("\nЯвляются людьми одного поколения\n\n"), menu; write("\nНе являются людьми одного поколения\n\n"), menu.
+                       write("\nЯвляются людьми одного поколения\n\n"), menu; write("\nНе являются людьми одного поколения\n\n"), menu.
   
 	process(24) :- write("Введите имя взрослого: "), inputH(X), adult(X), write("\nЯвляется взрослым\n\n"), menu; write("\nНе является взрослым\n\n"), menu.
 
