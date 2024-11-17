@@ -102,7 +102,7 @@ clauses
  
  
  
-    changeHuman(Name1, Name2) :- retract(human(Name1, Gender)), assertz(human(Name2, Gender)).
+        changeHuman(Name1, Name2) :- retract(human(Name1, Gender)), assertz(human(Name2, Gender)).
  
  	changeRelat(Name1, Name2) :- retract(parent(Name1, Child)), assertz(parent(Name2, Child)), fail.
   	changeRelat(Name1, Name2) :- retract(parent(Parent, Name1)), assertz(parent(Parent, Name2)), fail.
